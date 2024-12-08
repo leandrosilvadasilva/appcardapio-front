@@ -1,0 +1,37 @@
+
+<mat-card >
+  <mat-card-content>
+    <mat-toolbar color= primary>
+      <span>Detalhes do  Produto</span>
+    </mat-toolbar>
+
+      <form [formGroup]="form" class="min-width">
+        <mat-form-field class="full-width ">
+          <input matInput placeholder="Nome Produto" formControlName="nome_insumo" #nome_insumo>
+          <mat-hint align="end">{{   nome_insumo.value?.length || 0 }}/100</mat-hint>
+          <mat-error *ngIf="form.get('nome_insumo')?.invalid">{{ getErrorMessage('nome_insumo') }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="full-width ">
+            <mat-label>Escolha a Marca</mat-label>
+            <mat-select formControlName="marca_insumo" >
+              <mat-option value="null"></mat-option>
+              <mat-option value="fe">FE</mat-option>
+              <mat-option value="be">BE</mat-option>
+            </mat-select>
+            <mat-error *ngIf="form.get('marca_insumo')?.invalid">{{ getErrorMessage('marca_insumo') }}</mat-error>
+            <!--<input matInput placeholder="Marca Produto" formControlName="marca_insumo">-->
+
+          </mat-form-field>
+
+      </form>
+
+  </mat-card-content>
+
+    <mat-card-actions>
+      <button mat-raised-button color="primary" (click)="onSubmit()">SALVAR</button>
+
+      <button mat-raised-button (click)="onCancel()">CANCELAR</button>
+    </mat-card-actions>
+
+</mat-card>

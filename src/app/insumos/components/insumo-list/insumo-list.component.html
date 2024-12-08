@@ -1,0 +1,49 @@
+<p>insumo-list works!</p>
+
+<mat-table [dataSource]="insumo">
+  <!--- Note that these columns can be defined in any order.
+        The actual rendered columns are set as a property on the row definition" -->
+  <ng-container matColumnDef="id">
+    <mat-header-cell *matHeaderCellDef> Código </mat-header-cell>
+    <mat-cell *matCellDef="let insumo"> {{ insumo.id }} </mat-cell>
+  </ng-container>
+
+  <!-- Position Column -->
+  <ng-container matColumnDef="nome_insumo">
+    <mat-header-cell *matHeaderCellDef> Nome Produto </mat-header-cell>
+    <mat-cell *matCellDef="let insumo"> {{ insumo.nome_insumo }} </mat-cell>
+  </ng-container>
+
+  <!-- Name Column -->
+  <ng-container matColumnDef="marca_insumo">
+    <mat-header-cell *matHeaderCellDef> marca </mat-header-cell>
+    <mat-cell *matCellDef="let insumo">
+      {{ insumo.marca_insumo }}
+      <mat-icon aria-hidden="false" aria-label="Marca do produto">{{
+        insumo.marca_insumo | marca
+      }}</mat-icon>
+    </mat-cell>
+  </ng-container>
+
+  <!-- Action Column -->
+  <ng-container matColumnDef="actions">
+    <mat-header-cell *matHeaderCellDef class="action-column">
+      <button (click)="onAdd()" mat-mini-fab color="accent" aria-label="Adicionar um produto">
+        <mat-icon>add</mat-icon>
+      </button>
+    </mat-header-cell>
+
+    <mat-cell *matCellDef="let insumo" class="action-column">
+      <button (click)="onEdit(insumo)" mat-icon-button color="primary" aria-label="Editar um produto">
+        <mat-icon>edit</mat-icon>
+      </button>
+
+      <button (click)="onDelete(insumo)" mat-icon-button color="warn" aria-label="Remover um produto">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+</mat-table>
