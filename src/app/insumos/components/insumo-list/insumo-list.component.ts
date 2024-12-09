@@ -16,8 +16,20 @@ export class InsumoListComponent {
   @Output() edit = new EventEmitter(false);
   @Output() remove = new EventEmitter(false);
 
+/*
+//this.form = this.formBuilder.group({
+      //nome_insumo: [''],
+      //marca_insumo: ['']
+    //});
+************ INSERIR NOVAS COLUNAS AO DISPLAY
+preco_insumo      : number;
+  quantidade_insumo : number;
+*/
+  readonly displayedColumns = [
+    'id',
+    'nome_insumo',
 
-  readonly displayedColumns = ['id', 'nome_insumo','marca_insumo', 'actions'];
+    'actions'];
 
 
   constructor(

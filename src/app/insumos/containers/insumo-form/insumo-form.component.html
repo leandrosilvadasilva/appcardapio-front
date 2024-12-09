@@ -11,7 +11,20 @@
           <mat-hint align="end">{{   nome_insumo.value?.length || 0 }}/100</mat-hint>
           <mat-error *ngIf="form.get('nome_insumo')?.invalid">{{ getErrorMessage('nome_insumo') }}</mat-error>
         </mat-form-field>
+<!-- *********************
 
+INSERIR NOVOS CAMPOS:
+//this.form = this.formBuilder.group({
+      //nome_insumo: [''],
+      //marca_insumo: ['']
+    //});
+
+
+
+"-->
+
+        <!-- CONSERTAR ESSE SELECT PARA UNIDADE
+         ou RETIRAR, SE NECESSÁRIO-->
         <mat-form-field class="full-width ">
             <mat-label>Escolha a Marca</mat-label>
             <mat-select formControlName="marca_insumo" >

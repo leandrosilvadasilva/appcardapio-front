@@ -18,7 +18,7 @@ export class InsumoFormComponent implements OnInit{
     {
       id: [''],
       nome_insumo: ['',[Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
-      marca_insumo: ['',[Validators.required]]
+      marca_insumo: ['',[Validators.required]],
     });
 
   constructor(private formBuilder: NonNullableFormBuilder,
@@ -40,7 +40,14 @@ export class InsumoFormComponent implements OnInit{
       this.form.setValue({
         id: insumo.id,
         nome_insumo: insumo.nome_insumo,
-        marca_insumo: insumo.marca_insumo,
+        marca_insumo: insumo.marca_insumo
+        //preco_insumo: insumo.preco_insumo,
+        //quantidade_insumo: insumo.quantidade_insumo
+
+        //this.form = this.formBuilder.group({
+      //nome_insumo: [''],
+      //marca_insumo: ['']
+    //});
       });
 
   }
