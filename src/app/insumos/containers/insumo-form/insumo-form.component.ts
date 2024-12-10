@@ -1,11 +1,12 @@
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { NonNullableFormBuilder, Validators } from '@angular/forms';
+import { FormGroup, NonNullableFormBuilder, UntypedFormArray, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 
+import { Insumo } from '../../model/Insumo';
+import { Produto } from '../../model/produto';
 import { InsumosService } from '../../services/insumos.service';
-import { Insumo } from '../../model/insumo';
 
 @Component({
   selector: 'app-insumo-form',
@@ -14,12 +15,7 @@ import { Insumo } from '../../model/insumo';
 })
 export class InsumoFormComponent implements OnInit{
 
-  form = this.formBuilder.group(
-    {
-      id: [''],
-      nome_insumo: ['',[Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
-      marca_insumo: ['',[Validators.required]],
-    });
+  form!: FormGroup;
 
   constructor(private formBuilder: NonNullableFormBuilder,
     private service: InsumosService,
@@ -27,42 +23,74 @@ export class InsumoFormComponent implements OnInit{
     private location: Location,
     private route: ActivatedRoute
   ){
-    //this.form = this.formBuilder.group({
-      //nome_insumo: [''],
-      //marca_insumo: ['']
-    //});
+
   }
+
   ngOnInit(): void {
-
     const insumo: Insumo = this.route.snapshot.data['insumo'];
-    console.log(insumo);
 
-      this.form.setValue({
-        id: insumo.id,
-        nome_insumo: insumo.nome_insumo,
-        marca_insumo: insumo.marca_insumo
-        //preco_insumo: insumo.preco_insumo,
-        //quantidade_insumo: insumo.quantidade_insumo
+    this.form = this.formBuilder.group(
+    {
+      id: [insumo.id],
+      nome_insumo: [insumo.nome_insumo,[Validators.required,
+        Validators.minLength(2),
+        Validators.maxLength(100)]],
+      marca_insumo: [insumo.marca_insumo,[Validators.required]],
+      produtos: this.formBuilder.array(this.retrieveProdutos(insumo), Validators.required)
+    });
+    console.log(this.form);
+    console.log(this.form.value);
+  }
 
-        //this.form = this.formBuilder.group({
-      //nome_insumo: [''],
-      //marca_insumo: ['']
-    //});
-      });
+  private retrieveProdutos(insumo: Insumo){
+      const produtos = [];
+      if(insumo?.produtos){
+        insumo.produtos.forEach(produto => produtos.push(this.createProduto(produto)))
+      }else{
+        produtos.push(this.createProduto());
+      }
+      return produtos;
+  }
 
+  private createProduto(produto: Produto={id:'', nomeProduto:'', marcaProduto:''}){
+
+      //Criar um grupo de campos
+      return this.formBuilder.group({
+          id: [produto.id],
+          nomeProduto: [produto.nomeProduto, [Validators.required,
+            Validators.minLength(2),
+            Validators.maxLength(100)]],
+          marcaProduto: [produto.marcaProduto,[Validators.required,
+            Validators.minLength(2),
+            Validators.maxLength(100)]]
+        });
+
+  }
+
+  getProdutosFormArray(){
+    return (<UntypedFormArray>this.form.get('produtos')).controls;
+  }
+
+  addNewProduct(){
+    const produtos = this.form.get('produtos') as UntypedFormArray;
+    produtos.push(this.createProduto());
+  }
+  removeProduct(index: number){
+    const produtos = this.form.get('produtos') as UntypedFormArray;
+    produtos.removeAt(index);
   }
 
 
   onSubmit(){
+    if(this.form.valid){
     this.service.save(this.form.value)
     .subscribe(result => this.onSuccess(),
-      error => this.onError()
-    //.subscribe(result => console.log(result),
-      //error => this.onError()
+      error => this.onError());
+    } else {
+      alert('Formulário Inválido');
+    }
 
-    //  console.log(error)
-  );
-  //console.log(this.form.value);
+
 }
 
 onCancel(){
@@ -94,6 +122,12 @@ private onError(){
       return `Tamanho máximo excedido de ${requiredLength} caracteres.`;
     }
     return 'Campo inválido.';
+  }
+
+
+  isFormArrayRequired(){
+    const produtos = this.form.get('produtos') as UntypedFormArray;
+    return !produtos.valid && produtos.hasError('required') && produtos.touched;
   }
 
 }

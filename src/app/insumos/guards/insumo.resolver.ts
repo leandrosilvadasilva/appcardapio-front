@@ -8,18 +8,19 @@ import { Observable, of } from 'rxjs';
 
 
 import { InsumosService } from '../services/insumos.service';
-import { Insumo } from '../model/insumo';
+import { Insumo } from '../model/Insumo';
 
 
 
 
+//CONSERTAR ESSE ERRO
 
-
-export const insumoResolver: ResolveFn<Observable<Insumo>> = (route, state,  service: InsumosService = inject(InsumosService)) => {
+export const insumoResolver: ResolveFn<Observable<Insumo>>
+ = (route, state,  service: InsumosService = inject(InsumosService)) => {
 
   if (route.params?.['id']){
     return service.loadById(route.params['id']);
   }
-  return of({id: '', nome_insumo: '', marca_insumo: ''});
+  return of({id: '', nome_insumo: '', marca_insumo: '', produtos:[]});
 
 };

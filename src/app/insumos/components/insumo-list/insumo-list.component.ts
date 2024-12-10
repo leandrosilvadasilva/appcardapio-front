@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Insumo } from '../../model/insumo';
+import { Insumo } from '../../model/Insumo';
 
 @Component({
   selector: 'app-insumo-list',
@@ -28,7 +28,7 @@ preco_insumo      : number;
   readonly displayedColumns = [
     'id',
     'nome_insumo',
-
+    'marca_insumo',
     'actions'];
 
 

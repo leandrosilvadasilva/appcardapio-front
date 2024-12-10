@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { Insumo } from '../model/insumo';
+import { Insumo } from '../model/Insumo';
 import { delay, first, take, tap } from 'rxjs/operators';
 
 

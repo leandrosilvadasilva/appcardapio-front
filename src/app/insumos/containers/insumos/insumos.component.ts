@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, Observable, of } from 'rxjs';
 
-import { ErrorDialogComponent } from '../../../shared/components/error-dialog/error-dialog.component';
-import { Insumo } from '../../model/insumo';
-import { InsumosService } from '../../services/insumos.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { ConfirmationDialogComponent } from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
+import { ErrorDialogComponent } from '../../../shared/components/error-dialog/error-dialog.component';
+import { InsumosService } from '../../services/insumos.service';
+import { Insumo } from '../../model/Insumo';
 
 @Component({
   selector: 'app-insumos',

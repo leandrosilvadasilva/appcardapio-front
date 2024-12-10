@@ -5,6 +5,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class MarcaPipe implements PipeTransform {
 
+
+  // CONSERTAR PARA UNIDADE
   transform(value: string, ...args: unknown[]): string {
     switch(value){
       case 'fe': return 'code';
