@@ -8,18 +8,18 @@
       <form [formGroup]="form" class="min-width">
         <mat-form-field class="full-width ">
           <input matInput placeholder="Nome Produto" formControlName="nome_insumo" #nome_insumo>
-          <mat-hint align="end">{{   nome_insumo.value?.length || 0 }}/100</mat-hint>
-          <mat-error *ngIf="form.get('nome_insumo')?.invalid">{{ getErrorMessage('nome_insumo') }}</mat-error>
+          <mat-hint align="end">{{   nome_insumo.value.length || 0 }}/100</mat-hint>
+          <mat-error *ngIf="form.get('nome_insumo')?.invalid">{{ formUtils.getErrorMessage(form, 'nome_insumo') }}</mat-error>
         </mat-form-field>
 
         <mat-form-field class="full-width">
             <mat-label>Escolha a Marca</mat-label>
             <mat-select formControlName="marca_insumo" >
-              <mat-option value="null"></mat-option>
+
               <mat-option value="FE">Fe</mat-option>
               <mat-option value="BE">Be</mat-option>
             </mat-select>
-            <mat-error *ngIf="form.get('marca_insumo')?.invalid">{{ getErrorMessage('marca_insumo') }}</mat-error>
+            <mat-error *ngIf="form.get('marca_insumo')?.invalid">{{ formUtils.getErrorMessage(form, 'marca_insumo') }}</mat-error>
           </mat-form-field>
           <mat-toolbar class="listaProd">
             <span> Lista de Produtos </span>
@@ -28,7 +28,7 @@
           </mat-toolbar>
 
 
-          <mat-error class="form-array-error" *ngIf="isFormArrayRequired()">
+          <mat-error class="form-array-error" *ngIf="formUtils.isFormArrayRequired(form, 'produtos')">
               Adicione ao menos um produto
           </mat-error>
 
@@ -42,13 +42,24 @@
                    <mat-form-field class="full-width">
                       <mat-label>Nome do Produto</mat-label>
                     <input matInput  formControlName="nomeProduto" #nomeProduto/>
-                    <mat-error *ngIf="getProdutosFormArray()[i].get('nomeProduto')?.invalid">Campo Inválido</mat-error>
+                    <mat-error *ngIf="getProdutosFormArray()[i].get('nomeProduto')?.invalid">
+                      {{ formUtils
+                      .getFormArrayFieldErrorMessage
+                      (form, 'produtos', 'nomeProduto', i )
+                      }}
+                    </mat-error>
                     </mat-form-field>
                 </td>
                 <td style="width: 65%">
                   <mat-form-field class="full-width">
                     <mat-label>Marca Produto</mat-label>
                   <input matInput  formControlName="marcaProduto" #nomeProduto/>
+                  <mat-error *ngIf="getProdutosFormArray()[i].get('marcaProduto')?.invalid">
+                    {{ formUtils
+                      .getFormArrayFieldErrorMessage
+                      (form, 'produtos', 'marcaProduto', i )
+                      }}
+                  </mat-error>
                   </mat-form-field>
                 </td>
                 <td>

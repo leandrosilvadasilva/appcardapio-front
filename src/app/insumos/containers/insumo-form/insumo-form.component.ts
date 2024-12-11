@@ -7,6 +7,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Insumo } from '../../model/Insumo';
 import { Produto } from '../../model/produto';
 import { InsumosService } from '../../services/insumos.service';
+import { FormUtilsService } from '../../../shared/form/form-utils.service';
 
 @Component({
   selector: 'app-insumo-form',
@@ -21,7 +22,8 @@ export class InsumoFormComponent implements OnInit{
     private service: InsumosService,
     private snackBar: MatSnackBar,
     private location: Location,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    public formUtils: FormUtilsService
   ){
 
   }
@@ -38,8 +40,7 @@ export class InsumoFormComponent implements OnInit{
       marca_insumo: [insumo.marca_insumo,[Validators.required]],
       produtos: this.formBuilder.array(this.retrieveProdutos(insumo), Validators.required)
     });
-    console.log(this.form);
-    console.log(this.form.value);
+
   }
 
   private retrieveProdutos(insumo: Insumo){
@@ -87,7 +88,7 @@ export class InsumoFormComponent implements OnInit{
     .subscribe(result => this.onSuccess(),
       error => this.onError());
     } else {
-      alert('Formulário Inválido');
+      this.formUtils.validateAllFormFields(this.form);
     }
 
 
@@ -107,28 +108,8 @@ private onError(){
   }
 
 
-  getErrorMessage(fieldName: string){
-     const  field = this.form.get(fieldName);
-
-     if(field?.hasError('required')){
-      return 'Campo obrigatório.'
-    }
-    if(field?.hasError('minlength')){
-      const requiredLength: number = field.errors ? field.errors['minlength']['requiredLength'] : 2;
-      return `Tamanho mínimo precisa ser de ${requiredLength} caracteres.`;
-    }
-    if(field?.hasError('maxlength')){
-      const requiredLength: number = field.errors ? field.errors['maxlength']['requiredLength'] : 200;
-      return `Tamanho máximo excedido de ${requiredLength} caracteres.`;
-    }
-    return 'Campo inválido.';
-  }
 
 
-  isFormArrayRequired(){
-    const produtos = this.form.get('produtos') as UntypedFormArray;
-    return !produtos.valid && produtos.hasError('required') && produtos.touched;
-  }
 
 }
 
