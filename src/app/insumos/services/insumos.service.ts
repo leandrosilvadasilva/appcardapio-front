@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { first, take } from 'rxjs/operators';
 
 import { Insumo } from '../model/Insumo';
-import { delay, first, take, tap } from 'rxjs/operators';
+import { InsumoPage } from '../model/insumo-page';
 
 
 @Injectable({
@@ -11,13 +12,11 @@ import { delay, first, take, tap } from 'rxjs/operators';
 export class InsumosService {
 
   private readonly API = 'api/insumos';
-  //private readonly API = '/assets/insumos.json';
-
 
   constructor(private readonly httpClient: HttpClient) { }
 
-  list(){
-    return this.httpClient.get<Insumo[]>(this.API)
+  list(page = 0, size = 5){
+    return this.httpClient.get<InsumoPage>(this.API, {params:{ page, size }})
     .pipe(
       take(1),
       first(),

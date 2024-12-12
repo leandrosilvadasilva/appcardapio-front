@@ -1,13 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
-import { catchError, Observable, of } from 'rxjs';
+import { catchError, Observable, of, tap } from 'rxjs';
 
 import { ConfirmationDialogComponent } from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import { ErrorDialogComponent } from '../../../shared/components/error-dialog/error-dialog.component';
 import { InsumosService } from '../../services/insumos.service';
 import { Insumo } from '../../model/Insumo';
+import { InsumoPage } from '../../model/insumo-page';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-insumos',
@@ -16,13 +18,11 @@ import { Insumo } from '../../model/Insumo';
 })
 export class InsumosComponent  {
 
-  insumo$: Observable <Insumo[]> | null= null;
-  //insumo: Insumo[] = [];
-  //InsumosService: InsumosService;
+  insumo$: Observable <InsumoPage> | null= null;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  //displayedColumns = ['id', 'nome_insumo','marca_insumo', 'actions'];
-    //  'preco_insumo',
-    //'quantidade_insumo'
+  pageIndex = 0;
+  pageSize = 10;
 
 constructor(
   public dialog: MatDialog,
@@ -31,19 +31,22 @@ constructor(
   private route: ActivatedRoute,
   private snackBar: MatSnackBar)
   {
-            //this.insumos = [];
-            //  this.InsumosService = new InsumosService();
+
   this.refresh();
-            //this.insumosService.list().subscribe(insumos => this.insumo = insumos)
+
   }
 
-refresh() {
-  this.insumo$ = this.insumosService.list()
+refresh(pageEvent = { length: 0, pageIndex: 0, pageSize: 10} ) {
+  this.insumo$ = this.insumosService.list(pageEvent.pageIndex, pageEvent.pageSize)
   .pipe(
+    tap(() => {
+      this.pageIndex = pageEvent.pageIndex;
+      this.pageSize = pageEvent.pageSize;
+    }),
     catchError(error => {
       this.onError('Erro ao carregar os produtos');
       //  console.log()
-      return of ([])
+      return of ({insumos: [], totalElements: 0, totalPages: 0 })
 
     })
   );
